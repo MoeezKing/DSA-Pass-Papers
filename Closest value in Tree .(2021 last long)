@@ -1,0 +1,95 @@
+#include <iostream>
+#include<climits>
+using namespace std;
+class Node
+{
+public:
+    int data;
+    Node* left;
+    Node* right;
+    Node(int data = -9999, Node* left = NULL, Node* right = NULL)
+    {
+        this->data = data;
+        this->left = left;
+        this->right = right;
+    }
+    
+};
+class Tree
+{
+  public:
+  Node* root;
+  Tree(Node* root=NULL)
+  {
+      this->root=root;
+  }
+     Node* insert(Node* apex, int val)  //insert function through recursion
+    {
+        if (apex == NULL)
+            return new Node(val);
+
+        if (val < apex->data)
+            apex->left = insert(apex->left, val);
+        else
+            apex->right = insert(apex->right, val);
+
+        return apex;
+    }
+    bool isLeaf(Node* apex)
+    {
+        return (apex->left==NULL && apex->right==NULL);
+    }
+    void insert(int val)
+    {
+        root = insert(root, val);
+    }
+    int absoluteValue(int num1,int num2)//return the +ve differnces (absolute)
+    {
+        int diff=num1-num2;
+        if(diff<0)
+            return (-1*diff);
+        else
+            return diff;
+    }
+    int nearValue(int num1,int num2,int val)  //compare the two values with the required value(val) 
+    {
+        int diff1=absoluteValue(num1,val);  //absolute differnce of num1 and Value
+        int diff2=absoluteValue(num2,val);  //absolute differnce of num2 and Value
+        if(diff2<diff1)     //returrns with smallest distance with the given value(val)
+            return num2;
+        else
+            return num1;
+    }
+    int closestValue(Node* apex,int val)
+    {
+        if(apex==NULL)  //return maximum number if Null
+        return INT_MAX;   //used from climits header file
+        
+        if(apex->data==val) // if data od apex is equal to val
+        return val;
+        
+        if(isLeaf(apex))  //if apex is leaf node then returning its data
+        return apex->data;
+        
+        return nearValue(nearValue(closestValue(apex->left,val),closestValue(apex->right,val),val),apex->data,val); //recursion of closest value
+                                  //comparing thw value from Left and right children ,then with apex data
+    }
+    int closestValue(int val)   //overloading
+    {
+        return closestValue(root,val);
+    }
+};
+int main()
+{
+    Tree  t1;
+    t1.insert(7);
+    t1.insert(99);
+    t1.insert(101);
+    t1.insert(4);
+    t1.insert(6);
+    t1.insert(10);
+    t1.insert(8);
+    
+    cout<<"Closest value in this tree to 12 is "<<t1.closestValue(12);
+    return 0;
+}
