@@ -1,0 +1,87 @@
+#include <iostream>
+using namespace std;
+class Node
+{
+    public:
+    int data;
+    Node *next;
+    Node *prev;
+    Node(int data=-9999,Node* next=NULL,Node* prev=NULL)
+    {
+        this->data=data;
+        this->next=next;
+        this->prev=prev;
+    }
+};
+class Queue
+{
+  public:
+  Node* front;
+  Node* rear;
+  Queue(Node* front=NULL,Node* rear=NULL)
+  {
+      this->front=front;
+      this->rear=rear;
+  }
+  bool isEmpty()
+  {
+      return ((front==NULL) && (rear==NULL));
+  }
+  void enqueue(int val)
+  {
+      Node* t=new Node(val);
+      if(isEmpty())
+      {
+          front=rear=t;
+          front->next=rear->next=front->prev=rear->prev=t;
+          return;
+      }
+      Node*temp=rear;
+      rear=t;
+      temp->next=rear;
+      rear->prev=temp;
+      rear->next=front;
+      front->prev=rear;
+  }
+  void dequeue()
+  {
+      if(isEmpty())
+        return;
+        
+      if(front==rear)
+      {
+          delete front;
+          delete rear;
+          front=rear=NULL;
+          return;
+      }
+      
+      Node*temp=front->next;
+      delete front;
+      temp->prev=rear;
+      rear->next=temp;
+      front =temp;
+  }
+  void print()
+  {
+      Node* temp=front;
+      while(temp->next!=front)
+      {
+          cout<<temp->data<<"-->";
+          temp=temp->next;
+      }
+      cout<<temp->data;
+  }
+};
+int main()
+{
+    Queue q1;
+    
+    for(int i=1;i<=10;i++)
+        q1.enqueue(i);
+        
+    q1.dequeue();    
+    q1.print();    
+
+    return 0;
+}
