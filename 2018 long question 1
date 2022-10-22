@@ -1,0 +1,45 @@
+#include <iostream>
+//#include<cstring>
+#include<queue>
+using namespace std;
+int main()
+{
+    queue<char> q1;
+    string n;
+    getline(cin,n);
+    
+    for(int i=0;n[i]!='\0';i++)
+        q1.push(n[i]);
+        
+    int size=q1.size();  
+    int mid=size/2;
+
+    bool statement=true;
+    while(size!=0)
+    {
+            if(size<=mid)
+            {
+                if(q1.front()!='b')
+                    {
+                        statement=false;
+                        break;
+                    }
+                  q1.pop();  
+            }
+            else
+            {
+                if(q1.front()!='a')
+                    {
+                        statement=false;
+                        break;
+                    }
+                  q1.pop();  
+            }
+        size--;
+    }
+    if(statement)
+        cout<<endl<<n<<" is in form of a^"<<mid<<" b^"<<mid;
+    else
+        cout<<endl<<n<<" is not in form of a^"<<mid<< "b^"<<mid;
+    return 0;
+}
